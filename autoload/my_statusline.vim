@@ -1,20 +1,6 @@
 " --------------------------------------
 " StatusLine
 "
-function! my_statusline#set_tabline_right() abort
-  " let l:ret ..= fnamemodify(getcwd(), ':~')
-  let l:ret = ''
-  if function('branch_name#get_current_branch_name') != 0
-    let l:branch_name = branch_name#get_current_branch_name()
-    if l:branch_name != ''
-      " let l:ret ..= ' (' .. branch_name#get_current_branch_name() .. ')'
-      let l:ret ..= branch_name#get_current_branch_name()
-    endif
-  endif
-  let l:ret ..= ' ' .. (has('nvim') ? '[N]' : '[V]')
-  return l:ret
-endfunction
-
 function! my_statusline#statusline() abort
   let l:mode_dict = {
     \ 'n': 'NORMAL',
@@ -96,6 +82,8 @@ function! my_statusline#tabline() abort
   endfor
 
   let l:ret ..= '%#TabLineFill#%T%=%#TabLineFill#'
-  let l:ret ..= my_statusline#set_tabline_right()
+  if exists('*MyStatuslineRightTabline')
+    let l:ret ..= MyStatuslineRightTabline()
+  endif
   return l:ret
 endfunction
